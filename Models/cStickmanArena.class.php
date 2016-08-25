@@ -2,7 +2,7 @@
 
 
 /**
- * class Arena
+ * class Arena blablabla
  */
 class cStickmanArena
 {
