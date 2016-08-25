@@ -61,6 +61,10 @@ class cStickman
 	 */
 	public $iDefeats;
 
+	public function getAttribute(){
+		return $this->aovAttributes;
+	}
+
 	/**
 	 * @param void $int x; int y
 	 */

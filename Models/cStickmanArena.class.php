@@ -48,27 +48,29 @@ class cStickmanArena
 	public function __construct($size, $maxplayer, $minplayer, $players)
 	{
 		// initialisation des cellule
-		this->$aoCell = [];
+		$this->aoCell = [];
+		$this->iSizeArenaHeight = $size;
+		$this->iSizeArenaWidth = $size;
 
 		// creatio des cellule
 		for ($x = 0; $x < $size; $x++){
 			for ($y = 0; $y < $size; $y++){
-				this->aoCell[] = new cCell($x,$y);
+				$this->aoCell[] = new cCell($x,$y);
 			}
 		}
 
 		// definition des proprieter de la partie
-		this->$iMaxStickman = $maxplayer;
-		this->$iMinStickman = $minplayer;
+		$this->iMaxStickman = $maxplayer;
+		$this->iMinStickman = $minplayer;
 
-		this->aoStickmen = [];
+		$this->aoStickmen = [];
 		// ajout des joueur a la partie
 		for ( $i = 0 ; $i < $players->length() ; $i++){
-			this->aoStickmen[] = $players[$i];
+			$this->aoStickmen[] = $players[$i];
 		}
 
 	}
-	
+
 
 	public function addPlayer($stickman) {
 		this->aoStickmen[] = $stickman;
@@ -76,7 +78,15 @@ class cStickmanArena
 
 	public function SpawnStickmen()
 	{
-		// ajouter des stickman nimporte sur quelle cellule
+		for ( $i = 0 ; $i < $aoStickmen ; $i++){
+			$x = rand(0,this->$iSizeArenaWidth);
+			$y = rand(0,this->$iSizeArenaHeight);
+			for ( $z = 0 ; $z < $aoCell->length() ; z++ ){
+				if ($aoCell[$z]->getY() === $y && $aoCell[$z]->getX() === $x){
+					$aoCell[$z]->addStickman($aoStickmen[$i]);
+				}
+			}
+		}
 		// TODO: implement here
 	}
 
@@ -85,8 +95,15 @@ class cStickmanArena
 	 */
 	public function SpawnItems()
 	{
-		// ajouter des items dans larene sur une cellule aleatoire
-		// TODO: implement here
+		for ( $i = 0 ; $i < $aoStickmen ; $i++){
+			$x = rand(0,$this->$iSizeArenaWidth);
+			$y = rand(0,$this->$iSizeArenaHeight);
+			for ( $z = 0 ; $z < $aoCell->length() ; z++ ){
+				if ($aoCell[$z]->getY() === $y && $aoCell[$z]->getX() === $x){
+					$aoCell[$z]->addStickman($aoStickmen[$i]);
+				}
+			}
+		}
 	}
 
 	/**
@@ -94,6 +111,12 @@ class cStickmanArena
 	 */
 	public function getMaxWeaponStrength()
 	{
+		$maxStrengh = 1
+		for($i = 0 ; $i < $this->aoStickmen->length() ; $i++){
+			if( $this->aoStickmen[$i]->getAttribute  > $maxStrengh){
+				$maxStrengh = $this->aoStickmen[$i]->getAttribute;
+			}
+		}
 		// TODO: implement here
 	}
 
@@ -102,6 +125,9 @@ class cStickmanArena
 	 */
 	public function isFull()
 	{
+		if($this->aoStickmen->length() === $this->iMaxStickman){
+
+		}
 		// TODO: implement here
 	}
 }

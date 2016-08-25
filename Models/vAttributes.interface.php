@@ -30,4 +30,22 @@ interface vAttributes
 	 * @var enum{strength; life}
 	 */
 	public $eType;
+	public function getCurret(){
+		return $this->iCurrent;
+	}
+
+
+	public function getInit(){
+		return $this->iInit;
+	}
+
+
+	public function getMax(){
+		return $this->$iMax;
+	}
+
+
+	public function getMin(){
+		return $this->$iMin;
+	}
 }
