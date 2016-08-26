@@ -44,12 +44,12 @@ class cStickman
 	 * @var integer
 	 */
 	public $iMovePoint;
-	
+
 	/**
 	 * @var integer
 	 */
 	public $iLookPoint;
-	
+
 	/**
 	* @var integer
 	*/
@@ -60,8 +60,8 @@ class cStickman
 	* @var boolean
 	*/
 	public $bProtect=false;
-	
-	
+
+
 	/**
 	*  @var integer
 	*/
@@ -87,21 +87,28 @@ class cStickman
 	 */
 	public $iDefeats;
 
+
+	public function getName(){
+		return $this->sName;
+	}
+	public function getAttribute(){
+		return $this->aovAttributes;
+	}
+
 	/**
 	 * @param void $int x; int y
 	 */
 	public function move($idArena,$x,$y)
 	{
-		// TODO: implement here	
-		
+		// TODO: implement here
 
 		 ////// conditions to verify
-		 
+
 		 //verify number of actionPoint and movePoint available
 		if ($iActionPoint==0 || $iMovePoint==0){
 			echo "error : you don't have enough points to move";
 		}
-		 
+
         /* verify position in arena */
 		$arena=$this->stickmanArena;
 		$width=$arena.iSizeArenaWidth;
@@ -110,7 +117,7 @@ class cStickman
 		if ($x>=width||$y>=height){
 			//then return error message
 			echo "error : target position out of the arena";
-		}        
+		}
 
         /*verify position <= 3mouvements */
 		$posStickmanX =$this.getPos().$iPosX;
@@ -125,99 +132,39 @@ class cStickman
 			echo "error : your mouvement is taller than authorized mouvement !";
 		}
 
-		
+
 
 		elseif{
 			/*processing : update position, action point and movePoint */
-		  	$this->cell.posX =+ $x; 
-          	$this->cell.posY =+ $y;  
-			$this->iActionPoint=$this->iActionPoint-$dist;  
+		  	$this->cell.posX =+ $x;
+          	$this->cell.posY =+ $y;
+			$this->iActionPoint=$this->iActionPoint-$dist;
 			$this->iMovePoint=$this->iMovePoint-$dist;
 		}
-		
-		
-		
+
+
+
+
 
 	}
 
 	/**
 	 *
 	 */
-	public function look($idArena)
-	{		
+	public function look($arrena)
+	{
 		// TODO: implement here
-
-		 ////// condition to verify  //////
-		 
-		  //verify number of actionPoint and lookPoint available
-		if ($iActionPoint==0 || $iLookPoint==0){
-			echo "error : you don't have enough points to look";
+		$allItemsOnCell = [];
+		$allStickmanOnCell = [];
+		for ($i = 0 ; $i < $arrena->allCell()->length() ; $i++){
+			if($arrena->allCell[$i]->getX === $this->getPos[0] && $arrena->allCell[$i]->getX === $this->getPos[1]){
+				$allStickmanOnCell = $arrena->allCell[$i]->getStickman ;
+				$allItemsOnCell =	$arrena->allCell[$i]->getItems ;
+			}
 		}
+		$leRetour = [$allStickmanOnCell, $allItemsOnCell];
+		return $leRetour;
 
-		else{
-			// We are looking for objects or Stickmen in the current cell
-			$currentCell = $this->cell; //getCell($this.getPos()) ?
-
-			//recup arena
-			$arena=getStickmanArena($idArena);
-
-			//recup list of stickmen and items
-			$stickmenList = $arena->aoStickmen;
-			$itemsList = $arena->aovItems;
-
-			//recup stickmen and items which are on the cell
-			array $stickmenInCurrentCell;
-			array $itemsInCurrentCell;
-			
-			if ($stickmenList!=null && !empty($stickmenList)){
-				$i=0;
-				for ($s=0; $s<=$stickmenList.sizeof; $s++){
-					if($stickmenList[$s].getPos()==$currentCell){
-						$stickmenInCurrentCell[$i]=$stickmenList[$s];
-						$i++;
-					}
-				}
-			}			
-			if($itemsList!=null && !empty($itemsList)){
-				$i=0;
-				for($s=0; $s<=$itemsList.sizeof(); $i++){
-					if($itemsList[$s].getPos()==$currentCell){
-						$itemsInCurrentCell[$i]=$itemsList[$s];
-						$i++;
-					}
-				}
-			}
-
-
-			//Delay results
-			if ($stickmenInCurrentCell!=null && !empty($stickmenInCurrentCell)){
-				echo "List of Stickman present in yout cell : ";
-				for ($a=0; $a<=$stickmenInCurrentCell.sizeof();$a++){
-					echo $stickmenInCurrentCell[$a]->sName;
-				}
-			}
-			else{
-				return echo "There are no Stickman in your cell";
-			}
-			
-			if ($itemsInCurrentCell!=null && !empty($itemsInCurrentCell)){
-				echo "List of Items present in yout cell : ";
-				for ($a=0; $a<=$itemsInCurrentCell.sizeof();$a++){
-					echo $itemsInCurrentCell[$a].getIdItem();
-				}
-			}
-			else{
-				return echo "There are no Item in your cell";
-			}
-
-			//update actionPoint
-			$this->iActionPoint=$this->iActionPoint-1;
-			$this->iLookPoint=$this->iLookPoint-1;
-
-		}
-
-
-	
 	}
 
 	/**
@@ -225,9 +172,9 @@ class cStickman
 	 */
 	public function protect()
 	{
-		 
+
 		////// condition to verify  //////
-		 
+
 		  //verify number of actionPoint and iDoingPoint available
 		if ($iActionPoint==0 || $iDoingPoint==0){
 			echo "error : you don't have enough points to look";
@@ -240,18 +187,18 @@ class cStickman
 			//update actionPoint
 			$iActionPoint=$iActionPoint-1;
 			$iDoingPoint=$iDoingPoint-1;
-			
+
 		}
-		
+
 	}
 
 	/**
 	 * @param void $int idStickman
 	 */
 	public function attack($idArena,$idStickman)
-	{		
+	{
 		////// condition to verify  //////
-		 
+
 		  //verify number of actionPoint and iDoingPoint available
 		if ($iActionPoint==0 || $iDoingPoint==0){
 			echo "error : you don't have enough points to look";
@@ -263,17 +210,17 @@ class cStickman
 				echo "Protection firewall is on this Stickman !";
 			}
 			else{
-				//update le stickman avec ses nouveaux attributs ?							
+				//update le stickman avec ses nouveaux attributs ?
 				$targetStickman.setLife(($targetStickman.getLife())-1);
 			}
 
-			//update actionPoint		
+			//update actionPoint
 			$iActionPoint=$iActionPoint-1;
-			$iDoingPoint=$iDoingPoint-1;		
-			
+			$iDoingPoint=$iDoingPoint-1;
+
 		}
-		
-		
+
+
 	}
 
 	/**
@@ -282,25 +229,25 @@ class cStickman
 	public function grab($idArena,$idItem)
 	{
 		////// condition to verify  //////
-		 
+
 		  //verify number of actionPoint and iDoingPoint available
 		if ($iActionPoint==0 || $iGrabPoint==0){
 			echo "error : you don't have enough points to look";
 		}
-		
+
 		//verify if item is on the same arena
 		// $arenaItem=get
 		// if(==$idArena){
 		// }
 
 		else{
-		
+
 			$this->aovItems.add($idItem);
-		
+
 			//update actionPoint
 			$iActionPoint=$iActionPoint-1;
 			$iGrabPoint=$iGrabPoint-1;
-			
+
 		}
 	}
 
@@ -325,6 +272,13 @@ class cStickman
 	 */
 	private function imDying()
 	{
+		for ( $i = 0 ; $i < $this->aovAttributes->length() ; $i++){
+			if($this->aovAttributes[$i]->getType() === 'life'){
+				if($this->aovAttributes[$i]->getCurrent() === 0){
+					return "i'm fucking die";
+				}
+			}
+		}
 		// TODO: implement here
 
 	}
@@ -332,16 +286,23 @@ class cStickman
 	/**
 	 *
 	 */
-	public function getPos()
+	public function getPos($arrena)
 	{
+		for ($i = 0 ; $i < $arrena->allCell()->length() ; $i++){
+			for($z = 0 ; $z < $arrena->allCell[$i]->getStickman()->length() ; $z++){
+				if($arrena->allCell[$i]->getStickman[$z]->getName === $this->sName){
+					$position = [$arrena->allCell[$i]->getX , $arrena->allCell[$i]->getY];
+					return $position;
+				}
+			}
+		}
 		// TODO: implement here
-		return $this->cell;
 	}
 
-	
+
 	public function getStickman(){
 	}
-	
+
 	/**
 	 *
 	 */
@@ -350,7 +311,7 @@ class cStickman
 	//	TODO: implement here
 		// return $this->idStickman;
 	// }
-	
+
 
 
 }
