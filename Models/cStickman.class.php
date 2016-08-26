@@ -78,7 +78,7 @@ class cStickman
 	 */
 	public function move($idArena,$x,$y)
 	{
-		// TODO: implement here	
+		// TODO: implement here
 
 		 ////// conditions to verify
         /* verify position in arena */
@@ -89,7 +89,7 @@ class cStickman
 		if ($x>=width||$y>=height){
 			//then return error message
 			echo "error : target position out of the arena";
-		}        
+		}
 
         /*verify position <= 3mouvements */
 		$posStickmanX =$this.getPos().$iPosX;
@@ -107,73 +107,30 @@ class cStickman
 
 		elseif{
 			/*processing : update position and action point */
-		  	$this->cell.posX =+ $x; 
-          	$this->cell.posY =+ $y;  
-			$iActionPoint=$iActionPoint-$dist;  
+		  	$this->cell.posX =+ $x;
+          	$this->cell.posY =+ $y;
+			$iActionPoint=$iActionPoint-$dist;
 		}
-		
+
 
 	}
 
 	/**
 	 *
 	 */
-	public function look($idArena)
-	{		
+	public function look($arrena)
+	{
 		// TODO: implement here
-
-		//$actionReturn = 1 ; 
-		//Verify if $iActionPoint!=0
-		// if($iActionPoint > 0 && $iLookPoint!=0 ){
-		// 	//reduce actionPoint
-		// 	$iActionPoint=$iActionPoint-1;
-		// 	$iLookPoint=0;
-		// }
-		// else{
-		// 	return null;
-		// }
-
-
-		// We are looking for objects or Stickmen in the current cell
-		$currentCell = $this->cell; //getCell($this.getPos()) ?
-
-		//recup arena
-		$arena=getStickmanArena($idArena);
-
-		//recup list of stickmen
-		$stickmenList = $arena->aoStickmen;
-
-		//recup stickmen which are on the cell
-		array $stickmenInCurrentCell;
-		if ($stickmenList!=null && !empty($stickmenList)){
-			$i=0;
-			for ($s=0; $s<=$stickmenList.sizeof; $s++){
-				if($stickmenList[$s].getPos()==$currentCell){
-					$stickmenInCurrentCell[$i]=$stickmenList[$s];
-					$i++;
-				}
+		$allItemsOnCell = [];
+		$allStickmanOnCell = [];
+		for ($i = 0 ; $i < $arrena->allCell()->length() ; $i++){
+			if($arrena->allCell[$i]->getX === $this->getPos[0] && $arrena->allCell[$i]->getX === $this->getPos[1]){
+				$allStickmanOnCell = $arrena->allCell[$i]->getStickman ;
+				$allItemsOnCell =	$arrena->allCell[$i]->getItems ;
 			}
 		}
+		$leRetour = [$allStickmanOnCell, $allItemsOnCell];
 
-
-		//Delay results
-		if ($stickmenInCurrentCell!=null && !empty($stickmenInCurrentCell)){
-			echo "List of Stickman present in yout cell";
-			for ($a=0; $a<=$stickmenInCurrentCell.sizeof();$a++){
-				echo $stickmenInCurrentCell[$a].getIdStickman();
-			}
-		}
-		else{
-			echo "There are no Stickman in your cell";
-		}
-
-		
-		
-
-
-
-
-	
 	}
 
 	/**
@@ -181,7 +138,7 @@ class cStickman
 	 */
 	public function protect($idArena)
 	{
-		 $iProtectPoint = 1 ;  
+		 $iProtectPoint = 1 ;
 
 		// TODO: implement here
 
@@ -189,7 +146,7 @@ class cStickman
 			$iActionPoint=$iActionPoint-1;
 		}
 
-		//return $iActionPoint; 
+		//return $iActionPoint;
 	}
 
 	/**
@@ -200,7 +157,7 @@ class cStickman
 		// TODO: implement here
 
 		if($iActionPoint > 0 ){
-			$iActionPoint=$iActionPoint-1;	
+			$iActionPoint=$iActionPoint-1;
 		}
 		return $id
 
@@ -254,13 +211,12 @@ class cStickman
 		for ($i = 0 ; $i < $arrena->allCell()->length() ; $i++){
 			for($z = 0 ; $z < $arrena->allCell[$i]->getStickman()->length() ; $z++){
 				if($arrena->allCell[$i]->getStickman[$z]->getName === $this->sName){
-					$position = 'pos y' & $arrena->allCell[$i]->getY & 'pos x' $arrena->allCell[$i]->getX;
+					$position = [$arrena->allCell[$i]->getX , $arrena->allCell[$i]->getY];
 					return $position;
 				}
 			}
 		}
 		// TODO: implement here
-		return $this->cell;
 	}
 
 	/**
