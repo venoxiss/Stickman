@@ -44,12 +44,12 @@ class cStickman
 	 * @var integer
 	 */
 	public $iMovePoint;
-	
+
 	/**
 	 * @var integer
 	 */
 	public $iLookPoint;
-	
+
 	/**
 	* @var integer
 	*/
@@ -60,8 +60,8 @@ class cStickman
 	* @var boolean
 	*/
 	public $bProtect=false;
-	
-	
+
+
 	/**
 	*  @var integer
 	*/
@@ -103,12 +103,12 @@ class cStickman
 		// TODO: implement here
 
 		 ////// conditions to verify
-		 
+
 		 //verify number of actionPoint and movePoint available
 		if ($iActionPoint==0 || $iMovePoint==0){
 			echo "error : you don't have enough points to move";
 		}
-		 
+
         /* verify position in arena */
 		$arena=$this->stickmanArena;
 		$width=$arena.iSizeArenaWidth;
@@ -132,18 +132,18 @@ class cStickman
 			echo "error : your mouvement is taller than authorized mouvement !";
 		}
 
-		
+
 
 		elseif{
 			/*processing : update position, action point and movePoint */
-		  	$this->cell.posX =+ $x; 
-          	$this->cell.posY =+ $y;  
-			$this->iActionPoint=$this->iActionPoint-$dist;  
+		  	$this->cell.posX =+ $x;
+          	$this->cell.posY =+ $y;
+			$this->iActionPoint=$this->iActionPoint-$dist;
 			$this->iMovePoint=$this->iMovePoint-$dist;
 		}
-		
-		
-		
+
+
+
 
 
 	}
@@ -163,6 +163,7 @@ class cStickman
 			}
 		}
 		$leRetour = [$allStickmanOnCell, $allItemsOnCell];
+		return $leRetour;
 
 	}
 
@@ -171,9 +172,9 @@ class cStickman
 	 */
 	public function protect()
 	{
-		 
+
 		////// condition to verify  //////
-		 
+
 		  //verify number of actionPoint and iDoingPoint available
 		if ($iActionPoint==0 || $iDoingPoint==0){
 			echo "error : you don't have enough points to look";
@@ -186,18 +187,18 @@ class cStickman
 			//update actionPoint
 			$iActionPoint=$iActionPoint-1;
 			$iDoingPoint=$iDoingPoint-1;
-			
+
 		}
-		
+
 	}
 
 	/**
 	 * @param void $int idStickman
 	 */
 	public function attack($idArena,$idStickman)
-	{		
+	{
 		////// condition to verify  //////
-		 
+
 		  //verify number of actionPoint and iDoingPoint available
 		if ($iActionPoint==0 || $iDoingPoint==0){
 			echo "error : you don't have enough points to look";
@@ -209,17 +210,17 @@ class cStickman
 				echo "Protection firewall is on this Stickman !";
 			}
 			else{
-				//update le stickman avec ses nouveaux attributs ?							
+				//update le stickman avec ses nouveaux attributs ?
 				$targetStickman.setLife(($targetStickman.getLife())-1);
 			}
 
-			//update actionPoint		
+			//update actionPoint
 			$iActionPoint=$iActionPoint-1;
-			$iDoingPoint=$iDoingPoint-1;		
-			
+			$iDoingPoint=$iDoingPoint-1;
+
 		}
-		
-		
+
+
 	}
 
 	/**
@@ -228,25 +229,25 @@ class cStickman
 	public function grab($idArena,$idItem)
 	{
 		////// condition to verify  //////
-		 
+
 		  //verify number of actionPoint and iDoingPoint available
 		if ($iActionPoint==0 || $iGrabPoint==0){
 			echo "error : you don't have enough points to look";
 		}
-		
+
 		//verify if item is on the same arena
 		// $arenaItem=get
 		// if(==$idArena){
 		// }
 
 		else{
-		
+
 			$this->aovItems.add($idItem);
-		
+
 			//update actionPoint
 			$iActionPoint=$iActionPoint-1;
 			$iGrabPoint=$iGrabPoint-1;
-			
+
 		}
 	}
 
@@ -298,10 +299,10 @@ class cStickman
 		// TODO: implement here
 	}
 
-	
+
 	public function getStickman(){
 	}
-	
+
 	/**
 	 *
 	 */
@@ -310,7 +311,7 @@ class cStickman
 	//	TODO: implement here
 		// return $this->idStickman;
 	// }
-	
+
 
 
 }
