@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * this teh the class of Cell
  */
 class cCell
 {
