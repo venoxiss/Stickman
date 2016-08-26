@@ -15,7 +15,7 @@ class cLife implements vAttributes
 	public function __construct()
 	{
 		this.$maxLife = 5;
-		this.$currentLife = 5;
+		create('life';)
 	}
 
 	/**

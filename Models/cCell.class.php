@@ -71,6 +71,10 @@ class cCell
 		}
 	}
 
+	public function getStickman(){
+		return $this->aoStickmen;
+	}
+
 	public function getY(){
 		return this->$iPosY;
 	}

@@ -71,6 +71,13 @@ class cStickmanArena
 
 	}
 
+	public function allPlayer(){
+		return $this->aoStickmen;
+	}
+
+	public function allCell(){
+		return $this->aoCell;
+	}
 
 	public function addPlayer($stickman) {
 		this->aoStickmen[] = $stickman;
@@ -126,7 +133,7 @@ class cStickmanArena
 	public function isFull()
 	{
 		if($this->aoStickmen->length() === $this->iMaxStickman){
-
+			return 'full';
 		}
 		// TODO: implement here
 	}

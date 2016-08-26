@@ -30,6 +30,23 @@ interface vAttributes
 	 * @var enum{strength; life}
 	 */
 	public $eType;
+
+	public function create($type){
+		if($type === 'strength'){
+			$this->iCurrent = 1;
+			$this->iInit = 1;
+			$this->iMax = 1;
+			$this->iMin = 1;
+			$this->eType = $type;
+		} else {
+			$this->iCurrent = 5;
+			$this->iInit = 5;
+			$this->iMax = 5;
+			$this->iMin = 0;
+			$this->eType = $type;
+		}
+	}
+
 	public function getCurret(){
 		return $this->iCurrent;
 	}
@@ -47,5 +64,8 @@ interface vAttributes
 
 	public function getMin(){
 		return $this->$iMin;
+	}
+	public function getMin(){
+		return $this->$eType;
 	}
 }

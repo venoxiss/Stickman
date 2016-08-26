@@ -61,6 +61,10 @@ class cStickman
 	 */
 	public $iDefeats;
 
+
+	public function getName(){
+		return $this->sName;
+	}
 	public function getAttribute(){
 		return $this->aovAttributes;
 	}
@@ -126,14 +130,29 @@ class cStickman
 	 */
 	private function imDying()
 	{
+		for ( $i = 0 ; $i < $this->aovAttributes->length() ; $i++){
+			if($this->aovAttributes[$i]->getType() === 'life'){
+				if($this->aovAttributes[$i]->getCurrent() === 0){
+					return "i'm fucking die";
+				}
+			}
+		}
 		// TODO: implement here
 	}
 
 	/**
 	 *
 	 */
-	public function getPos()
+	public function getPos($arrena)
 	{
+		for ($i = 0 ; $i < $arrena->allCell()->length() ; $i++){
+			for($z = 0 ; $z < $arrena->allCell[$i]->getStickman()->length() ; $z++){
+				if($arrena->allCell[$i]->getStickman[$z]->getName === $this->sName){
+					$position = 'pos y' & $arrena->allCell[$i]->getY & 'pos x' $arrena->allCell[$i]->getX;
+					return $position;
+				}
+			}
+		}
 		// TODO: implement here
 	}
 }
