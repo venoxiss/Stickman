@@ -44,6 +44,28 @@ class cStickman
 	 * @var integer
 	 */
 	public $iMovePoint;
+	
+	/**
+	 * @var integer
+	 */
+	public $iLookPoint;
+	
+	/**
+	* @var integer
+	*/
+	public $iGrabPoint;
+
+
+	/**
+	* @var boolean
+	*/
+	public $bProtect=false;
+	
+	
+	/**
+	*  @var integer
+	*/
+	public $iDoingPoint;
 
 	/**
 	 * @var integer
@@ -81,10 +103,16 @@ class cStickman
 		// TODO: implement here
 
 		 ////// conditions to verify
+		 
+		 //verify number of actionPoint and movePoint available
+		if ($iActionPoint==0 || $iMovePoint==0){
+			echo "error : you don't have enough points to move";
+		}
+		 
         /* verify position in arena */
 		$arena=$this->stickmanArena;
-		$width=arena.iSizeArenaWidth;
-		$height=arena.iSizeArenaHeight;
+		$width=$arena.iSizeArenaWidth;
+		$height=$arena.iSizeArenaHeight;
 
 		if ($x>=width||$y>=height){
 			//then return error message
@@ -98,19 +126,24 @@ class cStickman
 
 		$authorizedMvt = 3;
 
-		if($dist>$authorizedMvt){
+		/*verify that mvt<=3 (the number of mvt authorized in the game) and mvt<= current movePoint of the stickman*/
+		if($dist>$authorizedMvt || $dist>$iMovePoint){
 			//then return error message
 			echo "error : your mouvement is taller than authorized mouvement !";
 		}
 
-		//other condition to verify ....
+		
 
 		elseif{
-			/*processing : update position and action point */
-		  	$this->cell.posX =+ $x;
-          	$this->cell.posY =+ $y;
-			$iActionPoint=$iActionPoint-$dist;
+			/*processing : update position, action point and movePoint */
+		  	$this->cell.posX =+ $x; 
+          	$this->cell.posY =+ $y;  
+			$this->iActionPoint=$this->iActionPoint-$dist;  
+			$this->iMovePoint=$this->iMovePoint-$dist;
 		}
+		
+		
+		
 
 
 	}
@@ -136,31 +169,57 @@ class cStickman
 	/**
 	 *
 	 */
-	public function protect($idArena)
+	public function protect()
 	{
-		 $iProtectPoint = 1 ;
-
-		// TODO: implement here
-
-		if($iActionPoint > 0 ){
-			$iActionPoint=$iActionPoint-1;
+		 
+		////// condition to verify  //////
+		 
+		  //verify number of actionPoint and iDoingPoint available
+		if ($iActionPoint==0 || $iDoingPoint==0){
+			echo "error : you don't have enough points to look";
 		}
 
-		//return $iActionPoint;
+		else{
+			//Set protection true
+			$this->bProtect=true;
+
+			//update actionPoint
+			$iActionPoint=$iActionPoint-1;
+			$iDoingPoint=$iDoingPoint-1;
+			
+		}
+		
 	}
 
 	/**
 	 * @param void $int idStickman
 	 */
 	public function attack($idArena,$idStickman)
-	{
-		// TODO: implement here
-
-		if($iActionPoint > 0 ){
-			$iActionPoint=$iActionPoint-1;
+	{		
+		////// condition to verify  //////
+		 
+		  //verify number of actionPoint and iDoingPoint available
+		if ($iActionPoint==0 || $iDoingPoint==0){
+			echo "error : you don't have enough points to look";
 		}
-		return $id
 
+		else{
+			$targetStickman=getStickman($idStickman);
+			if ($targetStickman->bProtect==true){
+				echo "Protection firewall is on this Stickman !";
+			}
+			else{
+				//update le stickman avec ses nouveaux attributs ?							
+				$targetStickman.setLife(($targetStickman.getLife())-1);
+			}
+
+			//update actionPoint		
+			$iActionPoint=$iActionPoint-1;
+			$iDoingPoint=$iDoingPoint-1;		
+			
+		}
+		
+		
 	}
 
 	/**
@@ -168,7 +227,27 @@ class cStickman
 	 */
 	public function grab($idArena,$idItem)
 	{
-		// TODO: implement here
+		////// condition to verify  //////
+		 
+		  //verify number of actionPoint and iDoingPoint available
+		if ($iActionPoint==0 || $iGrabPoint==0){
+			echo "error : you don't have enough points to look";
+		}
+		
+		//verify if item is on the same arena
+		// $arenaItem=get
+		// if(==$idArena){
+		// }
+
+		else{
+		
+			$this->aovItems.add($idItem);
+		
+			//update actionPoint
+			$iActionPoint=$iActionPoint-1;
+			$iGrabPoint=$iGrabPoint-1;
+			
+		}
 	}
 
 	/**
@@ -219,14 +298,19 @@ class cStickman
 		// TODO: implement here
 	}
 
+	
+	public function getStickman(){
+	}
+	
 	/**
 	 *
 	 */
-	public function getIdStickman()
-	{
-		// TODO: implement here
-		return $this->idStickman;
-	}
+	// public function getIdStickman()
+	// {
+	//	TODO: implement here
+		// return $this->idStickman;
+	// }
+	
 
 
 }
