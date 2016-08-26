@@ -26,6 +26,11 @@ class cStickmanArena
 		 */
 		public $aoStickmen;
 
+			/**
+		 * @var array object
+		 */
+		private $aovItems;
+
 		/**
 		 * @var integer
 		 */

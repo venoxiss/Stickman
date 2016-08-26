@@ -44,6 +44,28 @@ class cStickman
 	 * @var integer
 	 */
 	public $iMovePoint;
+	
+	/**
+	 * @var integer
+	 */
+	public $iLookPoint;
+	
+	/**
+	* @var integer
+	*/
+	public $iGrabPoint;
+
+
+	/**
+	* @var boolean
+	*/
+	public $bProtect=false;
+	
+	
+	/**
+	*  @var integer
+	*/
+	public $iDoingPoint;
 
 	/**
 	 * @var integer
@@ -71,12 +93,19 @@ class cStickman
 	public function move($idArena,$x,$y)
 	{
 		// TODO: implement here	
+		
 
 		 ////// conditions to verify
+		 
+		 //verify number of actionPoint and movePoint available
+		if ($iActionPoint==0 || $iMovePoint==0){
+			echo "error : you don't have enough points to move";
+		}
+		 
         /* verify position in arena */
 		$arena=$this->stickmanArena;
-		$width=arena.iSizeArenaWidth;
-		$height=arena.iSizeArenaHeight;
+		$width=$arena.iSizeArenaWidth;
+		$height=$arena.iSizeArenaHeight;
 
 		if ($x>=width||$y>=height){
 			//then return error message
@@ -90,19 +119,23 @@ class cStickman
 
 		$authorizedMvt = 3;
 
-		if($dist>$authorizedMvt){
+		/*verify that mvt<=3 (the number of mvt authorized in the game) and mvt<= current movePoint of the stickman*/
+		if($dist>$authorizedMvt || $dist>$iMovePoint){
 			//then return error message
 			echo "error : your mouvement is taller than authorized mouvement !";
 		}
 
-		//other condition to verify ....
+		
 
 		elseif{
-			/*processing : update position and action point */
+			/*processing : update position, action point and movePoint */
 		  	$this->cell.posX =+ $x; 
           	$this->cell.posY =+ $y;  
-			$iActionPoint=$iActionPoint-$dist;  
+			$this->iActionPoint=$this->iActionPoint-$dist;  
+			$this->iMovePoint=$this->iMovePoint-$dist;
 		}
+		
+		
 		
 
 	}
@@ -114,55 +147,74 @@ class cStickman
 	{		
 		// TODO: implement here
 
-		//$actionReturn = 1 ; 
-		//Verify if $iActionPoint!=0
-		// if($iActionPoint > 0 && $iLookPoint!=0 ){
-		// 	//reduce actionPoint
-		// 	$iActionPoint=$iActionPoint-1;
-		// 	$iLookPoint=0;
-		// }
-		// else{
-		// 	return null;
-		// }
+		 ////// condition to verify  //////
+		 
+		  //verify number of actionPoint and lookPoint available
+		if ($iActionPoint==0 || $iLookPoint==0){
+			echo "error : you don't have enough points to look";
+		}
 
+		else{
+			// We are looking for objects or Stickmen in the current cell
+			$currentCell = $this->cell; //getCell($this.getPos()) ?
 
-		// We are looking for objects or Stickmen in the current cell
-		$currentCell = $this->cell; //getCell($this.getPos()) ?
+			//recup arena
+			$arena=getStickmanArena($idArena);
 
-		//recup arena
-		$arena=getStickmanArena($idArena);
+			//recup list of stickmen and items
+			$stickmenList = $arena->aoStickmen;
+			$itemsList = $arena->aovItems;
 
-		//recup list of stickmen
-		$stickmenList = $arena->aoStickmen;
-
-		//recup stickmen which are on the cell
-		array $stickmenInCurrentCell;
-		if ($stickmenList!=null && !empty($stickmenList)){
-			$i=0;
-			for ($s=0; $s<=$stickmenList.sizeof; $s++){
-				if($stickmenList[$s].getPos()==$currentCell){
-					$stickmenInCurrentCell[$i]=$stickmenList[$s];
-					$i++;
+			//recup stickmen and items which are on the cell
+			array $stickmenInCurrentCell;
+			array $itemsInCurrentCell;
+			
+			if ($stickmenList!=null && !empty($stickmenList)){
+				$i=0;
+				for ($s=0; $s<=$stickmenList.sizeof; $s++){
+					if($stickmenList[$s].getPos()==$currentCell){
+						$stickmenInCurrentCell[$i]=$stickmenList[$s];
+						$i++;
+					}
+				}
+			}			
+			if($itemsList!=null && !empty($itemsList)){
+				$i=0;
+				for($s=0; $s<=$itemsList.sizeof(); $i++){
+					if($itemsList[$s].getPos()==$currentCell){
+						$itemsInCurrentCell[$i]=$itemsList[$s];
+						$i++;
+					}
 				}
 			}
-		}
 
 
-		//Delay results
-		if ($stickmenInCurrentCell!=null && !empty($stickmenInCurrentCell)){
-			echo "List of Stickman present in yout cell";
-			for ($a=0; $a<=$stickmenInCurrentCell.sizeof();$a++){
-				echo $stickmenInCurrentCell[$a].getIdStickman();
+			//Delay results
+			if ($stickmenInCurrentCell!=null && !empty($stickmenInCurrentCell)){
+				echo "List of Stickman present in yout cell : ";
+				for ($a=0; $a<=$stickmenInCurrentCell.sizeof();$a++){
+					echo $stickmenInCurrentCell[$a]->sName;
+				}
 			}
+			else{
+				return echo "There are no Stickman in your cell";
+			}
+			
+			if ($itemsInCurrentCell!=null && !empty($itemsInCurrentCell)){
+				echo "List of Items present in yout cell : ";
+				for ($a=0; $a<=$itemsInCurrentCell.sizeof();$a++){
+					echo $itemsInCurrentCell[$a].getIdItem();
+				}
+			}
+			else{
+				return echo "There are no Item in your cell";
+			}
+
+			//update actionPoint
+			$this->iActionPoint=$this->iActionPoint-1;
+			$this->iLookPoint=$this->iLookPoint-1;
+
 		}
-		else{
-			echo "There are no Stickman in your cell";
-		}
-
-		
-		
-
-
 
 
 	
@@ -171,31 +223,57 @@ class cStickman
 	/**
 	 *
 	 */
-	public function protect($idArena)
+	public function protect()
 	{
-		 $iProtectPoint = 1 ;  
-
-		// TODO: implement here
-
-		if($iActionPoint > 0 ){
-			$iActionPoint=$iActionPoint-1;
+		 
+		////// condition to verify  //////
+		 
+		  //verify number of actionPoint and iDoingPoint available
+		if ($iActionPoint==0 || $iDoingPoint==0){
+			echo "error : you don't have enough points to look";
 		}
 
-		//return $iActionPoint; 
+		else{
+			//Set protection true
+			$this->bProtect=true;
+
+			//update actionPoint
+			$iActionPoint=$iActionPoint-1;
+			$iDoingPoint=$iDoingPoint-1;
+			
+		}
+		
 	}
 
 	/**
 	 * @param void $int idStickman
 	 */
 	public function attack($idArena,$idStickman)
-	{
-		// TODO: implement here
-
-		if($iActionPoint > 0 ){
-			$iActionPoint=$iActionPoint-1;	
+	{		
+		////// condition to verify  //////
+		 
+		  //verify number of actionPoint and iDoingPoint available
+		if ($iActionPoint==0 || $iDoingPoint==0){
+			echo "error : you don't have enough points to look";
 		}
-		return $id
 
+		else{
+			$targetStickman=getStickman($idStickman);
+			if ($targetStickman->bProtect==true){
+				echo "Protection firewall is on this Stickman !";
+			}
+			else{
+				//update le stickman avec ses nouveaux attributs ?							
+				$targetStickman.setLife(($targetStickman.getLife())-1);
+			}
+
+			//update actionPoint		
+			$iActionPoint=$iActionPoint-1;
+			$iDoingPoint=$iDoingPoint-1;		
+			
+		}
+		
+		
 	}
 
 	/**
@@ -203,7 +281,27 @@ class cStickman
 	 */
 	public function grab($idArena,$idItem)
 	{
-		// TODO: implement here
+		////// condition to verify  //////
+		 
+		  //verify number of actionPoint and iDoingPoint available
+		if ($iActionPoint==0 || $iGrabPoint==0){
+			echo "error : you don't have enough points to look";
+		}
+		
+		//verify if item is on the same arena
+		// $arenaItem=get
+		// if(==$idArena){
+		// }
+
+		else{
+		
+			$this->aovItems.add($idItem);
+		
+			//update actionPoint
+			$iActionPoint=$iActionPoint-1;
+			$iGrabPoint=$iGrabPoint-1;
+			
+		}
 	}
 
 	/**
@@ -240,14 +338,19 @@ class cStickman
 		return $this->cell;
 	}
 
+	
+	public function getStickman(){
+	}
+	
 	/**
 	 *
 	 */
-	public function getIdStickman()
-	{
-		// TODO: implement here
-		return $this->idStickman;
-	}
+	// public function getIdStickman()
+	// {
+	//	TODO: implement here
+		// return $this->idStickman;
+	// }
+	
 
 
 }
